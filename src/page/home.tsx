@@ -10,7 +10,6 @@ const HomePage = () => {
   const movies = state.movies.movies ?? [];
 
   useEffect(() => {
-    // Only dispatch if loadedMovies exists
     if (loadedMovies) {
       dispatch({ type: 'FETCH_MOVIES', payload: loadedMovies });
     }

@@ -29,7 +29,7 @@ const TicketItem = ({ id }: TicketItemProps) => {
                         >${ticket.seatsCount} seats booked
                         </span>
                     </div>
-                    <button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`} onClick={() => { dispatch({ type: 'CANCEL_TICKET', payload: { id: ticket.id } }); dispatch({ type: 'CANCEL_MOVIE', payload: { id: movie.id, count: ticket.seatsCount } }); }}
+                    <button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`} onClick={() => { dispatch({ type: 'CANCEL_TICKET', payload: { id: ticket.id } }); dispatch({ type: 'CANCEL_MOVIE', payload: { id: ticket.movie_id, count: ticket.seatsCount } }); }}
                     >
                         Cancel Booking
                     </button>

@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router";
+import { createBrowserRouter, createRoutesFromElements, Route, useLoaderData } from "react-router";
 import { LoginChecker } from "../components/LoginChecker";
 import ErrorPage from "../page/error";
 import HomePage from "../page/home";

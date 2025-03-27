@@ -27,7 +27,7 @@ const movieReducer = (
       return {
         ...state,
         // Always use the payload array (even if empty) to ensure state reflects server response
-        movies: action.payload,
+        movies: state.movies.length == 0 ? action.payload : state.movies,
         loading: false,
         error: null
       };
@@ -49,8 +49,7 @@ const movieReducer = (
 
     case 'CANCEL_MOVIE': {
       const { id, count } = action.payload;
-      console.log(id)
-      console.log(count)
+
       return {
         ...state,
         movies: state.movies.map(movie =>

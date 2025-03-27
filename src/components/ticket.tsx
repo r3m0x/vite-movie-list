@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { useRootContext } from "../hooks/useRootContext";
 
 type TicketItemProps = {
@@ -7,6 +8,8 @@ type TicketItemProps = {
 
 const TicketItem = ({ id }: TicketItemProps) => {
 
+    const [isEdit, setIsEdit] = useState(false);
+    const [seatCount, setSeatCount] = useState(0);
     const { state, dispatch } = useRootContext();
 
     const ticket = state.tickets.tickets.find(ticket => ticket.id === id);
@@ -29,12 +32,45 @@ const TicketItem = ({ id }: TicketItemProps) => {
                         >${ticket.seatsCount} seats booked
                         </span>
                     </div>
-                    <button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`} onClick={() => { dispatch({ type: 'CANCEL_TICKET', payload: { id: ticket.id } }); dispatch({ type: 'CANCEL_MOVIE', payload: { id: ticket.movie_id, count: ticket.seatsCount } }); }}
+                    <input
+                        disabled={!isEdit}
+                        type="number"
+                        min="0"
+                        max={movie.availableSeatsCount}
+                        placeholder="Ticket Number"
+                        defaultValue={ticket.seatsCount}
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value, 10);
+                            setSeatCount(isNaN(value) ? 0 : value);
+                        }
+                        }
+                    />
+                    {!isEdit && (<button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`} onClick={() => { setIsEdit(true) }}>Edit Ticket </button>)}
+                    {isEdit && (
+
+                        <button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`}
+                            onClick={() => {
+                                setIsEdit(false);
+                                const movieAction = seatCount > ticket.seatsCount ? 'BOOK_MOVIE' : 'CANCEL_MOVIE';
+                                const seatDiff = Math.abs(seatCount - ticket.seatsCount)
+                                dispatch({ type: movieAction, payload: { id: ticket.movie_id, count: seatDiff } });
+                                dispatch({ type: 'UPDATE_TICKET', payload: { id: ticket.id, count: seatCount } });
+                            }}
+                        >
+                            Confirm
+                        </button>
+                    )
+                    }
+                    <button className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors`}
+                        onClick={() => {
+                            dispatch({ type: 'CANCEL_TICKET', payload: { id: ticket.id } });
+                            dispatch({ type: 'CANCEL_MOVIE', payload: { id: ticket.movie_id, count: ticket.seatsCount } });
+                        }}
                     >
                         Cancel Booking
                     </button>
                 </div>
-            </div>
+            </div >
         );
     }
 

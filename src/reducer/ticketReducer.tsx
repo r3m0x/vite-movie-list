@@ -55,14 +55,7 @@ const ticketReducer = (
       const { id } = action.payload;
       return {
         ...state,
-        tickets: state.tickets.map(ticket =>
-          ticket.id === id && ticket.seatsCount > 0
-            ? {
-              ...ticket,
-              seatsCount: 0
-            }
-            : ticket
-        )
+        tickets: state.tickets.filter(ticket => ticket.id !== id)
       };
     }
 

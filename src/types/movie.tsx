@@ -1,15 +1,7 @@
-import { Slot } from "./slot";
-
-interface Movie {
-    id: number;
-}
-
-interface MovieDetails {
+export interface Movie {
+    id: string;
     title: string;
     description?: string;
-    duration?: number;
+    totalSeatsCount: number;
     availableSeatsCount: number;
-    showtime: Slot[]
 }
-
-export interface MovieListingItemType extends Movie, MovieDetails { };

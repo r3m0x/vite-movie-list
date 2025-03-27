@@ -15,8 +15,8 @@ export const initialState: MovieState = {
 // Action type definitions
 export type MovieAction =
   | { type: 'FETCH_MOVIES'; payload: Movie[] }
-  | { type: 'BOOK_MOVIE'; payload: { id: string; } }
-  | { type: 'CANCEL_MOVIE'; payload: { id: string; } };
+  | { type: 'BOOK_MOVIE'; payload: { id: string; count: number } }
+  | { type: 'CANCEL_MOVIE'; payload: { id: string; count: number } };
 
 const movieReducer = (
   state: MovieState,
@@ -33,14 +33,14 @@ const movieReducer = (
       };
 
     case 'BOOK_MOVIE': {
-      const { id } = action.payload;
+      const { id, count } = action.payload;
       return {
         ...state,
         movies: state.movies.map(movie =>
-          movie.id === id && movie.availableSeatsCount > 0
+          movie.id === id && count > 0 && movie.availableSeatsCount - count >= 0
             ? {
               ...movie,
-              availableSeatsCount: movie.availableSeatsCount - 1
+              availableSeatsCount: movie.availableSeatsCount - count
             }
             : movie
         )
@@ -48,7 +48,9 @@ const movieReducer = (
     }
 
     case 'CANCEL_MOVIE': {
-      const { id } = action.payload;
+      const { id, count } = action.payload;
+      console.log(id)
+      console.log(count)
       return {
         ...state,
         movies: state.movies.map(movie =>
@@ -57,7 +59,7 @@ const movieReducer = (
               ...movie,
               // Ensure available seats don't exceed total capacity
               availableSeatsCount: Math.min(
-                movie.availableSeatsCount + 1,
+                movie.availableSeatsCount + count,
                 movie.totalSeatsCount
               )
             }

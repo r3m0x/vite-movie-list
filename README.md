@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# Movie Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple movie booking application built with React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1.  **Run the development server:**
 
-## Expanding the ESLint configuration
+    ```bash
+    npm run dev
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2.  **Open the website:**
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+    Open your web browser and navigate to `http://localhost:5173/`. You will be automatically redirected to the login page.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3.  **Login:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+    Use the following credentials to log in:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+    * **Username:** `admin`
+    * **Password:** `admin`
+
+4.  **Home Page and Booking:**
+
+    After successful login, you will be redirected to the home page. Here, you can:
+
+    * Choose a movie and select the number of seats you want to book.
+    * Note: One ticket can contain multiple seats.
+
+5.  **Manage Bookings Page:**
+
+    Navigate to the "My Bookings" page to view your current bookings.
+
+6.  **Edit Booking:**
+
+    On the "My Bookings" page, click the "Edit" button next to a booking to modify the number of seats for that ticket.
+
+7.  **Cancel Booking:**
+
+    To cancel a booking, click the "Cancel Booking" button next to the desired ticket. This will remove the booking.
+
+8.  **Logout:**
+
+    Click the "Logout" button to end your session and remove the login state. You will be redirected back to the login page.
+
+## Technologies Used
+
+* React
+* TypeScript
+* Tailwind CSS
+* Vite
+
+## Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone <repository_url>
+    ```
+
+2.  **Navigate to the project directory:**
+
+    ```bash
+    cd <project_directory>
+    ```
+
+3.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+## Development
+
+* **Start the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+* **Build for production:**
+
+    ```bash
+    npm run build
+    ```
+
+* **Preview the production build:**
+
+    ```bash
+    npm run preview
+    ```
+
+## Notes
+
+* This is a basic movie booking application and may lack advanced features.
+* The admin login is for demonstration purposes. In a real-world application, proper authentication and authorization would be required.
+* The movie data is sample data, and not using a real database.

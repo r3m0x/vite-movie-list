@@ -1,0 +1,142 @@
+[
+  {
+    "id": "movie-1",
+    "title": "Action Galaxy",
+    "description": "A brief description of Action Galaxy.",
+    "totalSeatsCount": 78,
+    "availableSeatsCount": 32
+  },
+  {
+    "id": "movie-2",
+    "title": "Romantic Echoes",
+    "description": "A brief description of Romantic Echoes.",
+    "totalSeatsCount": 112,
+    "availableSeatsCount": 85
+  },
+  {
+    "id": "movie-3",
+    "title": "Sci-Fi Frontiers",
+    "description": "A brief description of Sci-Fi Frontiers.",
+    "totalSeatsCount": 45,
+    "availableSeatsCount": 12
+  },
+  {
+    "id": "movie-4",
+    "title": "Comedy Chaos",
+    "description": "A brief description of Comedy Chaos.",
+    "totalSeatsCount": 92,
+    "availableSeatsCount": 67
+  },
+  {
+    "id": "movie-5",
+    "title": "Mystery Shadows",
+    "description": "A brief description of Mystery Shadows.",
+    "totalSeatsCount": 63,
+    "availableSeatsCount": 0
+  },
+  {
+    "id": "movie-6",
+    "title": "Adventure Quest",
+    "description": "A brief description of Adventure Quest.",
+    "totalSeatsCount": 28,
+    "availableSeatsCount": 17
+  },
+  {
+    "id": "movie-7",
+    "title": "Drama Heights",
+    "description": "A brief description of Drama Heights.",
+    "totalSeatsCount": 105,
+    "availableSeatsCount": 98
+  },
+  {
+    "id": "movie-8",
+    "title": "Thriller Edge",
+    "description": "A brief description of Thriller Edge.",
+    "totalSeatsCount": 51,
+    "availableSeatsCount": 23
+  },
+  {
+    "id": "movie-9",
+    "title": "Fantasy Realms",
+    "description": "A brief description of Fantasy Realms.",
+    "totalSeatsCount": 88,
+    "availableSeatsCount": 41
+  },
+  {
+    "id": "movie-10",
+    "title": "Animated Dreams",
+    "description": "A brief description of Animated Dreams.",
+    "totalSeatsCount": 35,
+    "availableSeatsCount": 19
+  },
+  {
+    "id": "movie-11",
+    "title": "Documentary Truths",
+    "description": "A brief description of Documentary Truths.",
+    "totalSeatsCount": 69,
+    "availableSeatsCount": 55
+  },
+  {
+    "id": "movie-12",
+    "title": "Historical Tales",
+    "description": "A brief description of Historical Tales.",
+    "totalSeatsCount": 118,
+    "availableSeatsCount": 72
+  },
+  {
+    "id": "movie-13",
+    "title": "Musical Notes",
+    "description": "A brief description of Musical Notes.",
+    "totalSeatsCount": 42,
+    "availableSeatsCount": 11
+  },
+  {
+    "id": "movie-14",
+    "title": "Horror Nights",
+    "description": "A brief description of Horror Nights.",
+    "totalSeatsCount": 95,
+    "availableSeatsCount": 80
+  },
+  {
+    "id": "movie-15",
+    "title": "Family Ties",
+    "description": "A brief description of Family Ties.",
+    "totalSeatsCount": 25,
+    "availableSeatsCount": 22
+  },
+  {
+    "id": "movie-16",
+    "title": "Sports Legends",
+    "description": "A brief description of Sports Legends.",
+    "totalSeatsCount": 73,
+    "availableSeatsCount": 48
+  },
+  {
+    "id": "movie-17",
+    "title": "War Stories",
+    "description": "A brief description of War Stories.",
+    "totalSeatsCount": 109,
+    "availableSeatsCount": 61
+  },
+  {
+    "id": "movie-18",
+    "title": "Crime Scene",
+    "description": "A brief description of Crime Scene.",
+    "totalSeatsCount": 58,
+    "availableSeatsCount": 39
+  },
+  {
+    "id": "movie-19",
+    "title": "Space Odyssey",
+    "description": "A brief description of Space Odyssey.",
+    "totalSeatsCount": 31,
+    "availableSeatsCount": 15
+  },
+  {
+    "id": "movie-20",
+    "title": "Time Traveler",
+    "description": "A brief description of Time Traveler.",
+    "totalSeatsCount": 82,
+    "availableSeatsCount": 76
+  }
+]

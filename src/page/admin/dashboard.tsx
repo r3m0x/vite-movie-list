@@ -1,5 +1,5 @@
 import { useLoginStore } from "../../store/useLoginStore";
-
+import { MovieDataTable } from "../../components/admin/MovieDataTable"; // Import the new component
 
 const AdminDashboardPage = () => {
     const { username } = useLoginStore();
@@ -13,24 +13,23 @@ const AdminDashboardPage = () => {
                     <p className="text-gray-600">You are logged in as an administrator.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="bg-blue-100 p-4 rounded-lg">
-                        <h3 className="font-semibold">Total Users</h3>
-                        <p className="text-2xl">2</p>
-                    </div>
+                {/* Remove or keep the summary cards as needed */}
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mb-8">
                     <div className="bg-green-100 p-4 rounded-lg">
                         <h3 className="font-semibold">Total Movies</h3>
-                        <p className="text-2xl">10</p>
-                    </div>
-                    <div className="bg-yellow-100 p-4 rounded-lg">
-                        <h3 className="font-semibold">Total Bookings</h3>
-                        <p className="text-2xl">25</p>
+                        <p className="text-2xl">10</p> {/* Replace with dynamic data if available */}
                     </div>
                 </div>
 
                 <div className="mt-8">
-                    <h2 className="text-xl font-semibold mb-4">Manage Movies</h2>
-                    
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold">Manage Movies</h2>
+
+                        Add New Movie
+
+                    </div>
+                    {/* Render the Movie Data Table */}
+                    <MovieDataTable />
                 </div>
             </div>
         </div>

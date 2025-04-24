@@ -1,8 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import axios from 'axios';
+import { createFileRoute } from '@tanstack/react-router';
 import { AuthChecker } from '../components/AuthChecker';
 import HomePage from '../page/home';
-import { Movie } from '../types/movie';
+
 
 export const Route = createFileRoute('/')({
     component: () => (
@@ -10,15 +9,6 @@ export const Route = createFileRoute('/')({
             <HomePage />
         </AuthChecker>
     ),
-    loader: async () => {
-        try {
-            const response = await axios.get<Movie[]>('http://localhost:8080/api/getMoviesList');
-            return response.data;
-        } catch (error) {
-            console.error('Movie data loading error:', error);
-            return [];
-        }
-    },
     staticData: {
         label: 'Home'
     }

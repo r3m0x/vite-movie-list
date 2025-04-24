@@ -7,7 +7,6 @@ interface MovieItemProps {
     id: string;
 }
 
-
 const MovieItem: React.FC<MovieItemProps> = ({ id }) => {
     const [seatCount, setSeatCount] = useState(0);
     const { movies } = useMovieStore();

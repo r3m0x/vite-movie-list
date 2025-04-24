@@ -9,42 +9,27 @@ type NavItem = {
 
 function Navbar() {
 
-    const { isLoggedIn, isAdmin } = useLoginStore();
+    const { isLoggedIn, role } = useLoginStore();
 
     const routeTreeChildren = routeTree.children ? Object.values(routeTree.children) : [];
 
     const filterNavItems: NavItem[] = routeTreeChildren
         ?.filter((route) => {
-
-            if (isLoggedIn) {
-                if (isAdmin) {
-                    console.log("is login admin = ",route.path.startsWith("/admin") || route.path=== "/logout");
-                    return route.path.startsWith("/admin") || route.path=== "/logout";
-                }
-                console.log("is login not admin = ",route.path !== "/login" && !route.path.startsWith("/admin"));
-                return route.path !== "/login" && !route.path.startsWith("/admin")
-            }
-            else{
-                console.log("is not login = ",route.path=== "/login");
-                return route.path=== "/login"
-            }
-
-            // return (
-
-
-            //     ((!isLoggedIn && route.path === "/login") ||
-            //         (isLoggedIn && route.path !== "/login")) &&
-            //     ((!isAdmin && !route.path.startsWith("/admin")) ||
-            //         (isAdmin && route.path.startsWith("/admin")))
-            // );
+            const isAdmin = role === "admin";
+            return (
+                ((!isLoggedIn && route.path === "login") ||
+                    (isLoggedIn && route.path !== "login")) &&
+                ((!isAdmin && !route.path.startsWith("admin")) ||
+                    (isAdmin && route.path.startsWith("admin")))
+            );
         })
-        .map((route) => ({
-            path: route.path,
-            label: route?.options?.staticData?.label || route.path, // Use label if available, fallback to path
-        })) || [];
-
-    console.log(filterNavItems);
-
+        .map((route) => {
+            const absolutePath = route.path.startsWith('/') ? route.path : `/${route.path}`;
+            return {
+                path: absolutePath,
+                label: route?.options?.staticData?.label || absolutePath, // Use label if available, fallback to path
+            };
+        }) || [];
 
     return (
         <nav className="bg-gradient-to-r from-purple-800 to-indigo-900 shadow-lg">

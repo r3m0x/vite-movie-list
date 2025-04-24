@@ -4,139 +4,179 @@
     "title": "Action Galaxy",
     "description": "A brief description of Action Galaxy.",
     "totalSeatsCount": 78,
-    "availableSeatsCount": 32
+    "availableSeatsCount": 32,
+    "rating": 3,
+    "showtime": "10:00 AM"
   },
   {
     "id": "movie-2",
     "title": "Romantic Echoes",
     "description": "A brief description of Romantic Echoes.",
     "totalSeatsCount": 112,
-    "availableSeatsCount": 85
+    "availableSeatsCount": 85,
+    "rating": 5,
+    "showtime": "1:00 PM"
   },
   {
     "id": "movie-3",
     "title": "Sci-Fi Frontiers",
     "description": "A brief description of Sci-Fi Frontiers.",
     "totalSeatsCount": 45,
-    "availableSeatsCount": 12
+    "availableSeatsCount": 12,
+    "rating": 2,
+    "showtime": "4:00 PM"
   },
   {
     "id": "movie-4",
     "title": "Comedy Chaos",
     "description": "A brief description of Comedy Chaos.",
     "totalSeatsCount": 92,
-    "availableSeatsCount": 67
+    "availableSeatsCount": 67,
+    "rating": 4,
+    "showtime": "7:00 PM"
   },
   {
     "id": "movie-5",
     "title": "Mystery Shadows",
     "description": "A brief description of Mystery Shadows.",
     "totalSeatsCount": 63,
-    "availableSeatsCount": 0
+    "availableSeatsCount": 0,
+    "rating": 1,
+    "showtime": "10:00 PM"
   },
   {
     "id": "movie-6",
     "title": "Adventure Quest",
     "description": "A brief description of Adventure Quest.",
     "totalSeatsCount": 28,
-    "availableSeatsCount": 17
+    "availableSeatsCount": 17,
+    "rating": 5,
+    "showtime": "10:00 AM"
   },
   {
     "id": "movie-7",
     "title": "Drama Heights",
     "description": "A brief description of Drama Heights.",
     "totalSeatsCount": 105,
-    "availableSeatsCount": 98
+    "availableSeatsCount": 98,
+    "rating": 3,
+    "showtime": "1:00 PM"
   },
   {
     "id": "movie-8",
     "title": "Thriller Edge",
     "description": "A brief description of Thriller Edge.",
     "totalSeatsCount": 51,
-    "availableSeatsCount": 23
+    "availableSeatsCount": 23,
+    "rating": 4,
+    "showtime": "4:00 PM"
   },
   {
     "id": "movie-9",
     "title": "Fantasy Realms",
     "description": "A brief description of Fantasy Realms.",
     "totalSeatsCount": 88,
-    "availableSeatsCount": 41
+    "availableSeatsCount": 41,
+    "rating": 2,
+    "showtime": "7:00 PM"
   },
   {
     "id": "movie-10",
     "title": "Animated Dreams",
     "description": "A brief description of Animated Dreams.",
     "totalSeatsCount": 35,
-    "availableSeatsCount": 19
+    "availableSeatsCount": 19,
+    "rating": 1,
+    "showtime": "10:00 PM"
   },
   {
     "id": "movie-11",
     "title": "Documentary Truths",
     "description": "A brief description of Documentary Truths.",
     "totalSeatsCount": 69,
-    "availableSeatsCount": 55
+    "availableSeatsCount": 55,
+    "rating": 5,
+    "showtime": "10:00 AM"
   },
   {
     "id": "movie-12",
     "title": "Historical Tales",
     "description": "A brief description of Historical Tales.",
     "totalSeatsCount": 118,
-    "availableSeatsCount": 72
+    "availableSeatsCount": 72,
+    "rating": 3,
+    "showtime": "1:00 PM"
   },
   {
     "id": "movie-13",
     "title": "Musical Notes",
     "description": "A brief description of Musical Notes.",
     "totalSeatsCount": 42,
-    "availableSeatsCount": 11
+    "availableSeatsCount": 11,
+    "rating": 4,
+    "showtime": "4:00 PM"
   },
   {
     "id": "movie-14",
     "title": "Horror Nights",
     "description": "A brief description of Horror Nights.",
     "totalSeatsCount": 95,
-    "availableSeatsCount": 80
+    "availableSeatsCount": 80,
+    "rating": 2,
+    "showtime": "7:00 PM"
   },
   {
     "id": "movie-15",
     "title": "Family Ties",
     "description": "A brief description of Family Ties.",
     "totalSeatsCount": 25,
-    "availableSeatsCount": 22
+    "availableSeatsCount": 22,
+    "rating": 1,
+    "showtime": "10:00 PM"
   },
   {
     "id": "movie-16",
     "title": "Sports Legends",
     "description": "A brief description of Sports Legends.",
     "totalSeatsCount": 73,
-    "availableSeatsCount": 48
+    "availableSeatsCount": 48,
+    "rating": 5,
+    "showtime": "10:00 AM"
   },
   {
     "id": "movie-17",
     "title": "War Stories",
     "description": "A brief description of War Stories.",
     "totalSeatsCount": 109,
-    "availableSeatsCount": 61
+    "availableSeatsCount": 61,
+    "rating": 3,
+    "showtime": "1:00 PM"
   },
   {
     "id": "movie-18",
     "title": "Crime Scene",
     "description": "A brief description of Crime Scene.",
     "totalSeatsCount": 58,
-    "availableSeatsCount": 39
+    "availableSeatsCount": 39,
+    "rating": 4,
+    "showtime": "4:00 PM"
   },
   {
     "id": "movie-19",
     "title": "Space Odyssey",
     "description": "A brief description of Space Odyssey.",
     "totalSeatsCount": 31,
-    "availableSeatsCount": 15
+    "availableSeatsCount": 15,
+    "rating": 2,
+    "showtime": "7:00 PM"
   },
   {
     "id": "movie-20",
     "title": "Time Traveler",
     "description": "A brief description of Time Traveler.",
     "totalSeatsCount": 82,
-    "availableSeatsCount": 76
+    "availableSeatsCount": 76,
+    "rating": 1,
+    "showtime": "10:00 PM"
   }
 ]

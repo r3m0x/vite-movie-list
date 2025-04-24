@@ -9,18 +9,21 @@ interface AuthCheckerProps {
 }
 
 export const AuthChecker: React.FC<AuthCheckerProps> = ({ children, requiredLogin = false, requireAdmin = false }) => {
-    const { isLoggedIn, isAdmin } = useLoginStore();
+    const { isLoggedIn, role } = useLoginStore();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (requiredLogin && !isLoggedIn) {
             navigate({ to: '/login' });
-        } else if (requireAdmin && !isAdmin) {
+        } else if (requireAdmin && role !== 'admin') {
             navigate({ to: '/' });
         }
-    }, [isLoggedIn, isAdmin, navigate, requiredLogin, requireAdmin]);
+        else if (!requireAdmin && role == 'admin') {
+            navigate({ to: '/admin' });
+        }
+    }, [isLoggedIn, role, navigate, requiredLogin, requireAdmin]);
 
-    if ((requiredLogin && !isLoggedIn) || (requireAdmin && !isAdmin)) {
+    if ((requiredLogin && !isLoggedIn)) {
         return null;
     }
 

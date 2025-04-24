@@ -8,15 +8,15 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const { isLoggedIn, isAdmin, login } = useLoginStore();
+    const { isLoggedIn, role, login } = useLoginStore();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn && isAdmin !== undefined) {
-            navigate({ to: isAdmin ? '/admin' : '/my-booking' });
+        if (isLoggedIn ) {
+            navigate({ to: role !== 'admin' ? '/my-booking' : '/admin' });
         }
-    }, [isLoggedIn, isAdmin, navigate]);
+    }, [isLoggedIn, role, navigate]);
 
     const handleLoginSubmit = async (e: FormEvent) => {
         try {

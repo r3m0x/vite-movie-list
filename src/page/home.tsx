@@ -1,26 +1,26 @@
 import { useEffect } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData } from "@tanstack/react-router";
 import MovieItem from "../components/movie";
-import { useRootContext } from "../hooks/useRootContext";
+import { Movie } from "../types/movie";
+import { useMovieStore } from "../store/useMovieStore";
 
 const HomePage = () => {
-  const { state, dispatch } = useRootContext();
-  const loadedMovies = useLoaderData();
 
-  const movies = state.movies.movies ?? [];
+  const { movies, loading, error, fetchMovies } = useMovieStore();
+  const loadedMovies = useLoaderData({ from: '/' }) as Movie[];
 
   useEffect(() => {
     if (loadedMovies) {
-      dispatch({ type: 'FETCH_MOVIES', payload: loadedMovies });
+      fetchMovies(loadedMovies);
     }
-  }, [loadedMovies, dispatch]);
+  }, [loadedMovies, fetchMovies]);
 
-  if (state.movies.loading) {
+  if (loading) {
     return <div className="text-center py-8">Loading movies...</div>;
   }
 
-  if (state.movies.error) {
-    return <div className="text-center py-8 text-red-500">Error: {state.movies.error}</div>;
+  if (error) {
+    return <div className="text-center py-8 text-red-500">Error: {error}</div>;
   }
   return (
     <>
@@ -30,7 +30,7 @@ const HomePage = () => {
 
       <div className="movie-list">
         {movies.length > 0 ? (
-          movies.map((movie) => (
+          movies.map((movie: Movie) => (
             <MovieItem key={movie.id} id={movie.id} />
           ))
         ) : (

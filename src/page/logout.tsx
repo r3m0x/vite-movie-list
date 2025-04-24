@@ -1,14 +1,16 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { useRootContext } from "../hooks/useRootContext";
+import { useNavigate } from "@tanstack/react-router";
+import { useLoginStore } from "../store/useLoginStore";
+
 
 const LogoutPage = () => {
-    const { dispatch } = useRootContext();
+    const { logout } = useLoginStore();
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch({ type: 'LOGOUT' });
-    }, [dispatch, navigate]);
+        logout();
+        navigate({ to: '/' });
+    }, [logout, navigate]);
 
     return (
         <div className="text-center py-8">

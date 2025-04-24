@@ -1,45 +1,81 @@
-import { createBrowserRouter, createRoutesFromElements, Route, useLoaderData } from "react-router";
-import { LoginChecker } from "../components/LoginChecker";
-import ErrorPage from "../page/error";
+import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
+import { AuthChecker } from "../components/AuthChecker";
 import HomePage from "../page/home";
 import LoginPage from "../page/login";
 import LogoutPage from "../page/logout";
 import MyBookingPage from "../page/my-booking";
-import { RootContextProvider } from "../components/contextProvider";
+import AdminDashboardPage from "../page/admin/dashboard";
 import App from "../App";
 import { Movie } from "../types/movie";
 import axios from "axios";
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route
-            path="/"
-            element={(
-                <RootContextProvider>
-                    <App />
-                </RootContextProvider>
-            )}
-            errorElement={<ErrorPage />}
-        >
-            <Route path="login" element={<LoginPage />} />
-            <Route path="logout" element={<LogoutPage />} />
+const rootRoute = createRootRoute({
+    component: App
+})
 
-            <Route element={<LoginChecker />}>
-                <Route
-                    index
-                    element={<HomePage />}
-                    loader={async () => {
-                        try {
-                            const response = await axios.get<Movie[]>('../data/movies.json');
-                            return response.data;
-                        } catch (error) {
-                            console.error('Movie data loading error:', error);
-                        }
-                    }}
-                />
-                <Route path="my-booking" element={<MyBookingPage />} />
-            </Route>
-            <Route path="*" element={<ErrorPage />} />
-        </Route>
-    )
-);
+const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/',
+    component: () => (
+        <AuthChecker>
+            <HomePage />
+        </AuthChecker>
+    ),
+    loader: async () => {
+        try {
+            const response = await axios.get<Movie[]>('http://localhost:8080/api/getMoviesList');
+            return response.data;
+        } catch (error) {
+            console.error('Movie data loading error:', error);
+            return [];
+        }
+    },
+})
+
+const loginRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/login',
+    component: LoginPage,
+})
+
+const logoutRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/logout',
+    component: LogoutPage,
+})
+
+const myBookingRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/my-booking',
+    component: () => (
+        <AuthChecker>
+            <MyBookingPage />
+        </AuthChecker>
+    ),
+})
+
+const adminRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/admin',
+    component: () => (
+        <AuthChecker requireAdmin={true}>
+            <AdminDashboardPage />
+        </AuthChecker>
+    ),
+});
+
+const routeTree = rootRoute.addChildren([
+    indexRoute,
+    loginRoute,
+    logoutRoute,
+    myBookingRoute,
+    adminRoute
+])
+
+export const router = createRouter({ routeTree })
+
+declare module '@tanstack/react-router' {
+    interface Register {
+        router: typeof router
+    }
+}

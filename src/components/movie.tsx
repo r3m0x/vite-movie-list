@@ -1,6 +1,7 @@
-import { useRootContext } from "../hooks/useRootContext";
 import React, { useState } from "react";
 import { v7 as uuidv7 } from 'uuid';
+import { useMovieStore } from '../store/useMovieStore';
+import { useTicketStore } from '../store/useTicketStore';
 
 interface MovieItemProps {
     id: string;
@@ -9,32 +10,34 @@ interface MovieItemProps {
 
 const MovieItem: React.FC<MovieItemProps> = ({ id }) => {
     const [seatCount, setSeatCount] = useState(0);
+    const { movies } = useMovieStore();
 
-    const { state, dispatch } = useRootContext();
+    const { bookMovie } = useMovieStore();
+    const { bookTicket } = useTicketStore();
 
-    const movie = state.movies.movies.find(movie => movie.id === id);
+    const movie = movies.find(movie => movie.id === id);
     const ticket_id = uuidv7();
-
 
     if (movie)
         return (
             <div
                 key={movie.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-                <div className="p-4">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">
+                <div className="p-6">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-3 truncate hover:text-blue-600 transition-colors">
                         {movie.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 h-[60px]">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 h-[60px] leading-relaxed">
                         {movie.description}
                     </p>
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-center mb-6">
                         <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${movie.availableSeatsCount > 0
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                                }`}
+                            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                                movie.availableSeatsCount > 0
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                            }`}
                         >
                             {movie.availableSeatsCount > 0
                                 ? `${movie.availableSeatsCount} seats available`
@@ -50,16 +53,20 @@ const MovieItem: React.FC<MovieItemProps> = ({ id }) => {
                         onChange={(e) => {
                             const value = parseInt(e.target.value, 10);
                             setSeatCount(isNaN(value) ? 0 : value);
-                        }
-                        }
+                        }}
+                        className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     />
                     <button
                         disabled={seatCount <= 0 || movie.availableSeatsCount - seatCount < 0}
-                        className={`w-full py-2 px-4 rounded-md font-medium text-white ${movie.availableSeatsCount > 0
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-gray-400 cursor-not-allowed"
-                            } transition-colors`}
-                        onClick={() => { dispatch({ type: 'BOOK_TICKET', payload: { id: ticket_id, movie_id: movie.id, count: seatCount } }); dispatch({ type: 'BOOK_MOVIE', payload: { id: movie.id, count: seatCount } }) }}
+                        className={`w-full py-3 px-6 rounded-lg font-semibold text-white ${
+                            movie.availableSeatsCount > 0
+                                ? "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+                                : "bg-gray-400 cursor-not-allowed"
+                        } transition-colors shadow-md hover:shadow-lg`}
+                        onClick={() => {
+                            bookTicket(ticket_id, movie.id, seatCount);
+                            bookMovie(movie.id, seatCount);
+                        }}
                     >
                         {movie.availableSeatsCount > 0 ? "Book Now" : "Unavailable"}
                     </button>

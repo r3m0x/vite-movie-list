@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
-import { useRootContext } from '../hooks/useRootContext';
-
+import { Link } from '@tanstack/react-router';
+import { useLoginStore } from '../store/useLoginStore';
 
 type NavItem = {
     path: string;
@@ -16,28 +15,29 @@ const navItems: NavItem[] = [
 
 function Navbar() {
 
-    const loginContext = useRootContext();
-    const isLoggedIn = loginContext.state.login.isLoggedIn;
+    const { isLoggedIn } = useLoginStore();
 
     const filterNavItems = navItems.filter((item) => { return (!isLoggedIn && item.path === '/login') || (isLoggedIn && item.path != '/login') })
 
     return (
-        <nav className="bg-gradient-to-r from-indigo-800 to-purple-800 p-4 shadow-lg">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-                <div className="flex items-center">
-                    <span className="text-white font-semibold text-xl mr-6 tracking-wide">Movie booking</span>
-                    <div className="md:flex space-x-4">
-                        {filterNavItems.map((item) => (
-                            <span key={item.path} className="">
+        <nav className="bg-gradient-to-r from-purple-800 to-indigo-900 shadow-lg">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center">
+                        <span className="text-white font-bold text-2xl tracking-tight">MovieHub</span>
+                    </div>
+                    <div className="hidden md:block">
+                        <div className="ml-10 flex items-baseline space-x-4">
+                            {filterNavItems.map((item) => (
                                 <Link
                                     key={item.path}
                                     to={item.path}
-                                    className="text-gray-200 hover:bg-purple-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300"
+                                    className="text-gray-300 hover:bg-purple-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out"
                                 >
                                     {item.label}
                                 </Link>
-                            </span>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

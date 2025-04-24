@@ -1,25 +1,28 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useLoginStore } from '../store/useLoginStore';
 
 interface AuthCheckerProps {
     children: React.ReactNode;
+    requiredLogin?: boolean;
     requireAdmin?: boolean;
 }
 
-export const AuthChecker: React.FC<AuthCheckerProps> = ({ children, requireAdmin = false }) => {
+export const AuthChecker: React.FC<AuthCheckerProps> = ({ children, requiredLogin = false, requireAdmin = false }) => {
     const { isLoggedIn, isAdmin } = useLoginStore();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate({ to: '/login' })
+        if (requiredLogin && !isLoggedIn) {
+            navigate({ to: '/login' });
         } else if (requireAdmin && !isAdmin) {
-            navigate({ to: '/' })
+            navigate({ to: '/' });
         }
-    }, [isLoggedIn, isAdmin, navigate, requireAdmin])
+    }, [isLoggedIn, isAdmin, navigate, requiredLogin, requireAdmin]);
 
-    if (!isLoggedIn) return null;
-    if (requireAdmin && !isAdmin) return null;
+    if ((requiredLogin && !isLoggedIn) || (requireAdmin && !isAdmin)) {
+        return null;
+    }
+
     return <>{children}</>;
-}
+};

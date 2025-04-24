@@ -1,18 +1,17 @@
-import { Outlet } from '@tanstack/react-router'
-import NavHeader from './components/NavHeader';
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import "./App.css";
+import { routeTree } from "./routeTree.gen";
 
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4">
-        <NavHeader />
-      </header>
+const router = createRouter({ routeTree });
 
-      <main className="max-w-6xl mx-auto p-4">
-        <Outlet /> {/* Renders matched child routes */}
-      </main>
-    </div>
-  )
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App
+function App() {
+  return <RouterProvider router={router} />;
+}
+
+export default App;

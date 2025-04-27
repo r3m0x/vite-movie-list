@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AuthChecker } from '../../components/AuthChecker'
+
 import AdminDashboardPage from '../../page/admin/dashboard'
+import { AuthChecker } from '../../components/common/AuthChecker'
 
 export const Route = createFileRoute('/admin/')({
     component: () => (

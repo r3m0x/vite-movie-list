@@ -1,21 +1,23 @@
 import { create } from 'zustand';
-import { Ticket } from '../types/ticket';
+import { Ticket } from '../../types/ticket';
 
 interface TicketState {
   tickets: Ticket[];
-  bookTicket: (id: string, movie_id: string, count: number) => void;
+  bookTicket: (id: string, movie_id: string, movie_title: string, movie_showtime: string, count: number) => void;
   updateTicket: (id: string, count: number) => void;
   cancelTicket: (id: string) => void;
 }
 
 export const useTicketStore = create<TicketState>()((set) => ({
   tickets: [],
-  bookTicket: (id, movie_id, count) => set((state) => ({
+  bookTicket: (id, movie_id, movie_title, movie_showtime, count) => set((state) => ({
     tickets: [
       ...state.tickets,
       {
         id,
         movie_id,
+        movie_title,
+        movie_showtime,
         seatsCount: count,
       }
     ]

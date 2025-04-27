@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import { useMovieStore } from '../store/useMovieStore';
-import { useTicketStore } from '../store/useTicketStore';
+import { useMovieStore } from '../../store/deprecated/useMovieStore';
+import { useTicketStore } from '../../store/deprecated/useTicketStore';
 
 type TicketItemProps = {
     id: string;

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Movie } from '../types/movie';
+import { Movie } from '../../types/movie';
 
 interface MovieState {
     movies: Movie[];

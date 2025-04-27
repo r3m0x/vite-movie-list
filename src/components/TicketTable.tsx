@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import TablePagination from "./TablePagination";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Utils from "../common/utils";
 import { Ticket } from "../types/ticket";
 import { useTicketFilters } from "../hooks/useTicketFilters";
@@ -26,10 +26,18 @@ interface TicketTableProps {
 
 const TicketTable: React.FC<TicketTableProps> = ({ tickets, buttons = [] }) => {
   const pageSize = Utils.range(10, 30, 10);
-  const showTimeOptions = [
-    { label: "Upcoming only", value: "upcoming" },
-  ];
-  // Use the extracted filter hook
+  const showTimeOptions = [{ label: "Upcoming only", value: "upcoming" }];
+
+  const [seatCounts, setSeatCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const newSeatCounts: Record<string, number> = {};
+    tickets.forEach((ticket) => {
+      newSeatCounts[ticket.id] = ticket.seatsCount;
+    });
+    setSeatCounts(newSeatCounts);
+  }, [tickets]);
+
   const { filters, setters, filteredData } = useTicketFilters(tickets);
   const { titleFilter, showtimeFilter, sorting } = filters;
   const { setTitleFilter, setShowtimeFilter, setSorting } = setters;
@@ -48,15 +56,29 @@ const TicketTable: React.FC<TicketTableProps> = ({ tickets, buttons = [] }) => {
         accessorKey: "movie_showtime",
         header: "Showtime",
         cell: (info) => {
-          const date = new Date(info.getValue() as string);
-          return date.toLocaleString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          });
+          const showtime = new Date(info.getValue() as string);
+          const now = new Date();
+          const isExpired = showtime < now;
+
+          return (
+            <div
+              className={`${isExpired ? "text-red-500 font-normal" : "text-green-600 font-medium"}`}
+            >
+              {showtime.toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+              {isExpired && (
+                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100">
+                  Expired
+                </span>
+              )}
+            </div>
+          );
         },
         enableSorting: true,
         sortingFn: (rowA, rowB, columnId) => {
@@ -306,7 +328,17 @@ const TicketTable: React.FC<TicketTableProps> = ({ tickets, buttons = [] }) => {
                                   type="number"
                                   min="1"
                                   max={row.original.seatsCount}
-                                  defaultValue={1}
+                                  value={
+                                    seatCounts[row.original.id] ||
+                                    row.original.seatsCount
+                                  }
+                                  onChange={(e) => {
+                                    const value = parseInt(e.target.value) || 1;
+                                    setSeatCounts({
+                                      ...seatCounts,
+                                      [row.original.id]: value,
+                                    });
+                                  }}
                                   className="w-14 px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                   aria-label="Number of seats booked"
                                 />
@@ -315,12 +347,9 @@ const TicketTable: React.FC<TicketTableProps> = ({ tickets, buttons = [] }) => {
                             <button
                               onClick={() => {
                                 if (button.seatCountRequired) {
-                                  const seatCountInput =
-                                    document.getElementById(
-                                      `seat-count-${row.id}`
-                                    ) as HTMLInputElement;
                                   const seatCount =
-                                    parseInt(seatCountInput.value) || 1;
+                                    seatCounts[row.original.id] ||
+                                    row.original.seatsCount;
                                   button.action(row.original, seatCount);
                                 } else {
                                   button.action(row.original);

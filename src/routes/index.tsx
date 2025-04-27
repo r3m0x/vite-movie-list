@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { AuthChecker } from '../components/AuthChecker';
+
+import { AuthChecker } from '../components/common/AuthChecker';
 import HomePage from '../page/home';
 
 

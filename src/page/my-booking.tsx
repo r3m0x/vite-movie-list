@@ -1,34 +1,99 @@
-import TicketItem from "../components/ticket";
-import { useTicketStore } from "../store/useTicketStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import TicketTable, { TicketTableButton } from "../components/TicketTable";
+import { useMovies } from "../hooks/useMovies";
+import { useTickets } from "../hooks/useTickets";
+import { adminApi } from "../services/admin";
+import { userApi } from "../services/user";
+import { Movie } from "../types/movie";
 import { Ticket } from "../types/ticket";
 
 const MyBookingPage = () => {
-    const { tickets } = useTicketStore();
+  // Add QueryClient to invalidate queries
+  const queryClient = useQueryClient();
 
+  const {
+    data: movies,
+    isLoading: isLoadingMovies,
+    error: queryMoviesError,
+  } = useMovies();
+
+  const {
+    data: tickets,
+    isLoading: isLoadingTickets,
+    error: queryTicketsError,
+  } = useTickets();
+
+  const deleteBookingMutation = useMutation({
+    mutationFn: (ticket: Ticket) => {
+      return userApi.deleteBooking(ticket.id);
+    },
+    onSuccess: async (response) => {
+      queryClient.invalidateQueries({ queryKey: ["tickets"] });
+      alert(`Ticket deleted!`);
+      return response;
+    },
+  });
+
+  const updateMovieMutation = useMutation({
+    mutationFn: (movie: Movie) => {
+      return adminApi.updateMovie(movie.id, {
+        availableSeatsCount: movie.availableSeatsCount,
+      });
+    },
+    onSuccess: async (response) => {
+      queryClient.invalidateQueries({ queryKey: ["movies"] });
+      return response;
+    },
+  });
+
+  const handleDeleteBooking = (ticket: Ticket) => {
+    if (ticket && ticket.id && ticket.movie_id && ticket.seatsCount > 0) {
+      const movie = movies?.find((movie) => movie.id === ticket.movie_id);
+      if (movie) {
+        if (
+          movie.availableSeatsCount + ticket.seatsCount <=
+          movie.totalSeatsCount
+        )
+          movie.availableSeatsCount += ticket.seatsCount;
+        else {
+          movie.availableSeatsCount = movie.totalSeatsCount;
+        }
+        updateMovieMutation.mutate(movie);
+        deleteBookingMutation.mutate(ticket);
+      } else {
+        alert(`Error: Movie not found!`);
+      }
+    } else {
+      alert(`Error: Booking not found!`);
+    }
+  };
+
+  const mutationHook = [
+    {
+      label: "Delete",
+      action: handleDeleteBooking,
+    },
+  ];
+
+  // Use isLoading from useQuery
+  if (isLoadingMovies || isLoadingTickets) {
+    return <div className="text-center py-8">Loading movies...</div>;
+  }
+
+  // Use queryError from useQuery
+  if (queryMoviesError || queryTicketsError) {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900">Your Bookings</h2>
-                <p className="mt-2 text-gray-600">Manage your movie tickets</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tickets.length > 0 ? (
-                    tickets.map((ticket: Ticket) => (
-                        <TicketItem key={ticket.id} id={ticket.id} />
-                    ))
-                ) : (
-                    <div className="col-span-full text-center py-12 bg-gray-50 rounded-lg">
-                        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <h3 className="mt-2 text-xl font-medium text-gray-900">No Bookings Found</h3>
-                        <p className="mt-1 text-gray-500">Start exploring movies to make your first booking!</p>
-                    </div>
-                )}
-            </div>
-        </div>
+      <div className="text-center py-8 text-red-500">
+        Error: {queryMoviesError?.message} {queryTicketsError?.message}
+      </div>
     );
+  }
+  return (
+    <TicketTable
+      tickets={tickets ?? []}
+      buttons={mutationHook as TicketTableButton<Ticket>[]}
+    />
+  );
 };
 
 export default MyBookingPage;

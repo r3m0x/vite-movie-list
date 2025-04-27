@@ -23,9 +23,16 @@ export interface MovieTableButton<T> {
 interface MovieTableProps {
   movies: Movie[];
   buttons?: MovieTableButton<Movie>[];
+  onSelectMovie?: (movie: Movie) => void;
+  selectedMovieId?: string;
 }
 
-const MovieTable: React.FC<MovieTableProps> = ({ movies, buttons = [] }) => {
+const MovieTable: React.FC<MovieTableProps> = ({ 
+  movies, 
+  buttons = [],
+  // onSelectMovie,
+  // selectedMovieId 
+}) => {
   const pageSize = Utils.range(10, 30, 10);
   const ratings = Utils.range(1, 5);
   const showTimeOptions = [
@@ -91,6 +98,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, buttons = [] }) => {
         const dateB = new Date(rowB.getValue(columnId) as string);
         return dateA.getTime() - dateB.getTime();
       },
+      
     },
     {
       id: 'seats',

@@ -16,7 +16,7 @@ function Navbar() {
         ?.filter((route) => {
             const isAdmin = role === "admin";
             return (
-                ((!isLoggedIn && route.path === "login") ||
+                (!route.options?.staticData?.hideInNav && (!isLoggedIn && route.path === "login") ||
                     (isLoggedIn && route.path !== "login")) &&
                 ((!isAdmin && !route.path.startsWith("admin")) ||
                     (isAdmin && (route.path.startsWith("admin") || route.path === "logout" )))

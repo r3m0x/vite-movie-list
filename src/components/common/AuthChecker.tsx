@@ -13,18 +13,21 @@ export const AuthChecker: React.FC<AuthCheckerProps> = ({
   requiredLogin = false,
   requireAdmin = false,
 }) => {
-  const { isLoggedIn, role } = useLoginStore();
+  const { isLoggedIn, role, checkExpiration } = useLoginStore();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    if (requiredLogin && !isLoggedIn) {
+    // Check expiration first
+    const isSessionValid = checkExpiration();
+    
+    if (requiredLogin && !isSessionValid) {
       navigate({ to: "/login" });
     } else if (requireAdmin && role !== "admin") {
       navigate({ to: "/" });
     } else if (!requireAdmin && role == "admin") {
       navigate({ to: "/admin" });
     }
-  }, [isLoggedIn, role, navigate, requiredLogin, requireAdmin]);
+  }, [isLoggedIn, role, navigate, requiredLogin, requireAdmin, checkExpiration]);
 
   if (requiredLogin && !isLoggedIn) {
     return null;

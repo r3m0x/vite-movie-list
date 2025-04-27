@@ -30,7 +30,7 @@ const HomePage = () => {
   });
 
   const handleAddBooking = (movie: Movie, seatCount: number) => {
-    if (movie && movie.id && movie.availableSeatsCount - seatCount > 0) {
+    if (movie && movie.id && movie.availableSeatsCount - seatCount >= 0) {
       movie.availableSeatsCount -= seatCount;
       updateMovieMutation.mutate(movie);
       addUserBookingMutation.mutate({

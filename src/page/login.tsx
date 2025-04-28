@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (isLoggedIn ) {
-            navigate({ to: role !== 'admin' ? '/my-booking' : '/admin' });
+            navigate({ to: role !== 'admin' ? '/' : '/admin' });
         }
     }, [isLoggedIn, role, navigate]);
 

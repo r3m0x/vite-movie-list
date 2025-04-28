@@ -72,19 +72,17 @@ const MovieFormMain: React.FC<MovieFormMainProps> = ({
   // Reset form when initialData changes
   useEffect(() => {
     if (!initialData) return;
-    
+
     form.reset(getDefaultValues(initialData));
   }, [initialData, isEditMode]);
 
   const handleNext = async (e?: React.MouseEvent<HTMLButtonElement>) => {
-
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
     try {
-
       await steps[currentStep].schema.parseAsync(form.state.values);
 
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -114,23 +112,23 @@ const MovieFormMain: React.FC<MovieFormMainProps> = ({
     >
       {/* Step indicator */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between max-w-2xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="flex flex-col items-center flex-1">
-              <div className="flex items-center w-full">
+              <div className="flex items-center justify-center w-full">
                 <div
-                  className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
+                  className={`flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 shadow-md ${
                     index < currentStep
-                      ? "bg-green-500 text-white"
+                      ? "bg-gradient-to-r from-green-400 to-green-500 text-white transform scale-105"
                       : index === currentStep
-                        ? "bg-indigo-600 text-white ring-4 ring-indigo-100"
-                        : "bg-gray-200 text-gray-600"
+                        ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white ring-4 ring-indigo-100 transform scale-110"
+                        : "bg-gray-100 text-gray-500 border border-gray-200"
                   }`}
                 >
                   {index < currentStep ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
+                      className="h-7 w-7"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -138,29 +136,23 @@ const MovieFormMain: React.FC<MovieFormMainProps> = ({
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
                   ) : (
-                    <span className="text-lg font-semibold">{index + 1}</span>
+                    <span className="text-xl font-bold">{index + 1}</span>
                   )}
                 </div>
-                {index < steps.length - 1 && (
-                  <div className="w-full h-1 mx-2 bg-gray-200 flex-1">
-                    <div
-                      className={`h-1 transition-all duration-500 ${
-                        index < currentStep ? "bg-green-500" : "bg-gray-200"
-                      }`}
-                      style={{ width: "100%" }}
-                    ></div>
-                  </div>
-                )}
               </div>
-              <div className="mt-2 text-center">
+              <div className="mt-3 text-center w-full">
                 <div
-                  className={`text-sm font-medium ${
-                    index === currentStep ? "text-indigo-600" : "text-gray-600"
+                  className={`font-medium transition-all duration-300 ${
+                    index === currentStep
+                      ? "text-indigo-600 text-base"
+                      : index < currentStep
+                        ? "text-green-600 text-sm"
+                        : "text-gray-500 text-sm"
                   }`}
                 >
                   {step.name}
@@ -183,6 +175,7 @@ const MovieFormMain: React.FC<MovieFormMainProps> = ({
           <PreviousButton
             onClick={handlePrevious}
             disabled={currentStep === 0}
+            hidden={currentStep === 0}
           />
 
           {currentStep < steps.length - 1 ? (

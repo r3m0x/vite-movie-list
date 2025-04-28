@@ -1,260 +1,360 @@
-import { useForm } from "@tanstack/react-form";
-import { movieDetailsSchema } from "../../../schemas/movieSchema";
-import { Movie } from "../../../types/movie";
-import { ZodError } from "zod";
+import React from "react";
+import { z } from "zod";
+import { movieSchema } from "../../../schemas/movieSchema";
 
 interface Step1Props {
-  formData: Partial<Movie>;
-  updateFormData: (data: Partial<Movie>) => void;
-  isEditMode: boolean;
+  form: any;
 }
 
-const FormStep1: React.FC<Step1Props> = ({
-  formData,
-  updateFormData,
-  isEditMode,
-}) => {
-  const form = useForm({
-    defaultValues: {
-      title: formData.title || "",
-      description: formData.description || "",
-      rating: formData.rating || 0,
-      totalSeatsCount: formData.totalSeatsCount || 50,
-      availableSeatsCount: formData.availableSeatsCount || 50,
-    },
-    onSubmit: async (values) => {
-      updateFormData(values.value);
-      return { status: "success" };
-    },
-  });
+const titleSchema = movieSchema.shape.title;
+const descriptionSchema = movieSchema.shape.description;
+const ratingSchema = movieSchema.shape.rating;
+const totalSeatsCountSchema = movieSchema.shape.totalSeatsCount;
+const availableSeatsCountSchema = movieSchema.shape.availableSeatsCount;
 
+const FormStep1: React.FC<Step1Props> = ({ form }) => {
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      className="space-y-6"
-    >
-      <div>
+    <div className="space-y-8">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
+        Movie Details
+      </h2>
+
+      {/* Title Field */}
+      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
         <form.Field
           name="title"
           validators={{
-            onChange: (value) => {
-              const result = movieDetailsSchema.shape.title.safeParse(value);
-              return result.success
-                ? { success: true }
-                : {
-                    success: false,
-                    error:
-                      result.error.errors[0]?.message || "Title is required",
-                  };
+            onChange: ({ value }: { value: string }) => {
+              try {
+                titleSchema.parse(value);
+                return undefined;
+              } catch (error) {
+                if (error instanceof z.ZodError) {
+                  return error.errors[0]?.message || "Title is invalid";
+                }
+                return "Title validation failed";
+              }
             },
           }}
         >
-          {(field) => (
+          {(field: any) => (
             <div>
               <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700"
+                htmlFor="title"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Movie Title
+                Title
               </label>
               <input
-                id={field.name}
-                name={field.name}
+                id="title"
+                type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                onBlur={field.handleBlur}
+                className={`w-full px-4 py-2 text-left border ${field.state.meta.isTouched && field.state.meta.errors?.length ? "border-red-500 bg-red-50" : "border-gray-300"} rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                placeholder="Enter movie title"
               />
-              {field.state.meta.touchedErrors ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {field.state.meta.touchedErrors}
-                </div>
-              ) : null}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors?.length > 0 && (
+                  <div className="mt-2 text-red-600 text-sm flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    {field.state.meta.errors}
+                  </div>
+                )}
             </div>
           )}
         </form.Field>
       </div>
 
-      <div>
+      {/* Description Field */}
+      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
         <form.Field
           name="description"
           validators={{
-            onChange: (value) => {
+            onChange: ({ value }: { value: string }) => {
               try {
-                movieDetailsSchema.shape.description.parse(value);
-                return { success: true };
-              } catch (error: any) {
-                return {
-                  success: false,
-                  error: error?.message || "Description is required",
-                };
+                descriptionSchema.parse(value);
+                return undefined;
+              } catch (error) {
+                if (error instanceof z.ZodError) {
+                  return error.errors[0]?.message || "Description is invalid";
+                }
+                return "Description validation failed";
               }
             },
           }}
         >
-          {(field) => (
+          {(field: any) => (
             <div>
               <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700"
+                htmlFor="description"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Description
               </label>
               <textarea
-                id={field.name}
-                name={field.name}
+                id="description"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
                 rows={4}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className={`w-full px-4 py-2 text-left border ${field.state.meta.isTouched && field.state.meta.errors?.length ? "border-red-500 bg-red-50" : "border-gray-300"} rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                placeholder="Enter movie description"
               />
-              {field.state.meta.touchedErrors ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {field.state.meta.touchedErrors}
-                </div>
-              ) : null}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors?.length > 0 && (
+                  <div className="mt-2 text-red-600 text-sm flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    {field.state.meta.errors}
+                  </div>
+                )}
             </div>
           )}
         </form.Field>
       </div>
 
-      <div>
+      {/* Rating Field */}
+      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
         <form.Field
           name="rating"
           validators={{
-            onChange: (value) => {
+            onChange: ({ value }: { value: number }) => {
               try {
-                movieDetailsSchema.shape.rating.parse(value);
-                return { success: true };
-              } catch (error: any) {
-                return {
-                  success: false,
-                  error: error?.message || "Invalid rating",
-                };
+                ratingSchema.parse(value);
+                return undefined;
+              } catch (error) {
+                if (error instanceof z.ZodError) {
+                  return error.errors[0]?.message || "Rating is invalid";
+                }
+                return "Rating validation failed";
               }
             },
           }}
         >
-          {(field) => (
+          {(field: any) => (
             <div>
               <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700"
+                htmlFor="rating"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Rating (0-10)
+                Rating (1-5)
               </label>
               <input
-                id={field.name}
-                name={field.name}
-                type="number"
-                min="0"
-                max="10"
-                step="0.1"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(parseFloat(e.target.value))}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-              {field.state.meta.touchedErrors ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {field.state.meta.touchedErrors}
-                </div>
-              ) : null}
-            </div>
-          )}
-        </form.Field>
-      </div>
-
-      <div>
-        <form.Field
-          name="totalSeatsCount"
-          validators={{
-            onChange: (value) => {
-              try {
-                movieDetailsSchema.shape.totalSeatsCount.parse(value);
-                return { success: true };
-              } catch (error: any) {
-                return {
-                  success: false,
-                  error: error?.message || "Invalid total seats",
-                };
-              }
-            },
-          }}
-        >
-          {(field) => (
-            <div>
-              <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700"
-              >
-                Total Seats
-              </label>
-              <input
-                id={field.name}
-                name={field.name}
+                id="rating"
                 type="number"
                 min="1"
+                max="5"
                 value={field.state.value}
-                onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                onBlur={field.handleBlur}
+                className={`w-full px-4 py-2 text-left border 
+                  ${
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors?.length
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  } 
+                    rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                placeholder="Enter rating from 0-5"
               />
-              {field.state.meta.touchedErrors ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {field.state.meta.touchedErrors}
-                </div>
-              ) : null}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors?.length > 0 && (
+                  <div className="mt-2 text-red-600 text-sm flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    {field.state.meta.errors}
+                  </div>
+                )}
             </div>
           )}
         </form.Field>
       </div>
 
-      <div>
-        <form.Field
-          name="availableSeatsCount"
-          validators={{
-            onChange: (value) => {
-              try {
-                movieDetailsSchema.shape.availableSeatsCount.parse(value);
-                return { success: true };
-              } catch (error: any) {
-                return {
-                  success: false,
-                  error: error?.message || "Invalid available seats",
-                };
-              }
-            },
-          }}
-        >
-          {(field) => (
-            <div>
-              <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700"
-              >
-                Available Seats
-              </label>
-              <input
-                id={field.name}
-                name={field.name}
-                type="number"
-                min="0"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-              {field.state.meta.touchedErrors ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {field.state.meta.touchedErrors}
-                </div>
-              ) : null}
-            </div>
-          )}
-        </form.Field>
+      {/* Seats Fields - Grouped in a flex container */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Total Seats Count Field */}
+        <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 flex-1">
+          <form.Field
+            name="totalSeatsCount"
+            validators={{
+              onChange: ({ value }: { value: number }) => {
+                try {
+                  totalSeatsCountSchema.parse(value);
+                  return undefined;
+                } catch (error) {
+                  if (error instanceof z.ZodError) {
+                    return (
+                      error.errors[0]?.message || "Total seats count is invalid"
+                    );
+                  }
+                  return "Total seats validation failed";
+                }
+              },
+            }}
+          >
+            {(field: any) => (
+              <div>
+                <label
+                  htmlFor="totalSeatsCount"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  Total Seats
+                </label>
+                <input
+                  id="totalSeatsCount"
+                  type="number"
+                  min="1"
+                  value={field.state.value}
+                  onChange={(e) =>
+                    field.handleChange(parseInt(e.target.value, 10))
+                  }
+                  onBlur={field.handleBlur}
+                  className={`w-full px-4 py-2 text-left border ${field.state.meta.isTouched && field.state.meta.errors?.length ? "border-red-500 bg-red-50" : "border-gray-300"} rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                  placeholder="Enter total seats"
+                />
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors?.length > 0 && (
+                    <div className="mt-2 text-red-600 text-sm flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                      {field.state.meta.errors}
+                    </div>
+                  )}
+              </div>
+            )}
+          </form.Field>
+        </div>
+
+        {/* Available Seats Count Field */}
+        <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 flex-1">
+          <form.Field
+            name="availableSeatsCount"
+            validators={{
+              onChange: ({
+                value,
+                formState,
+              }: {
+                value: number;
+                formState: any;
+              }) => {
+                try {
+                  // First validate with the Zod schema
+                  availableSeatsCountSchema.parse(value);
+                  // Then do the cross-field validation
+                  if (value > formState?.values.totalSeatsCount) {
+                    return "Available seats cannot exceed total seats";
+                  }
+
+                  return undefined;
+                } catch (error) {
+                  if (error instanceof z.ZodError) {
+                    return (
+                      error.errors[0]?.message ||
+                      "Available seats count is invalid"
+                    );
+                  }
+                  return "Available seats validation failed";
+                }
+              },
+            }}
+          >
+            {(field: any) => (
+              <div>
+                <label
+                  htmlFor="availableSeatsCount"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  Available Seats
+                </label>
+                <input
+                  id="availableSeatsCount"
+                  type="number"
+                  min="0"
+                  max={form.state.values.totalSeatsCount}
+                  value={field.state.value}
+                  onChange={(e) =>
+                    field.handleChange(parseInt(e.target.value, 10))
+                  }
+                  onBlur={field.handleBlur}
+                  className={`w-full px-4 py-2 text-left border ${field.state.meta.isTouched && field.state.meta.errors?.length ? "border-red-500 bg-red-50" : "border-gray-300"} rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                  placeholder="Enter available seats"
+                />
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors?.length > 0 && (
+                    <div className="mt-2 text-red-600 text-sm flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                      {field.state.meta.errors}
+                    </div>
+                  )}
+              </div>
+            )}
+          </form.Field>
+        </div>
       </div>
-    </form>
+    </div>
   );
 };
 

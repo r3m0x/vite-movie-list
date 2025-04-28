@@ -1,93 +1,133 @@
-import { useForm } from "@tanstack/react-form";
-import { showtimeSchema } from "../../../schemas/movieSchema";
-import { Movie } from "../../../types/movie";
+import React from "react";
+import { z } from "zod";
+import { movieSchema } from "../../../schemas/movieSchema";
 
 interface Step2Props {
-  formData: Partial<Movie>;
-  updateFormData: (data: Partial<Movie>) => void;
+  form: any;
   isEditMode: boolean;
 }
 
-const FormStep2: React.FC<Step2Props> = ({ 
-  formData, 
-  updateFormData,
-  isEditMode
-}) => {
-  const currentShowtime = formData.showtime 
-    ? new Date(formData.showtime) 
-    : new Date();
-  
-  const formatDateForInput = (date: Date) => {
-    return date.toISOString().slice(0, 16);
-  };
+// Extract showtime schema from the movie schema
+const showtimeSchema = movieSchema.shape.showtime;
 
-  const form = useForm({
-    defaultValues: {
-      showtime: currentShowtime,
-    },
-    onSubmit: async (values) => {
-      updateFormData({ showtime: values.showtime.toISOString() });
-      return { status: "success" };
-    }
-  });
-
+const FormStep2: React.FC<Step2Props> = ({ form, isEditMode = false }) => {
   return (
-    <form.Provider>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
-        }}
-        className="space-y-6"
-      >
-        <div>
-          <form.Field
-            name="showtime"
-            validators={{
-              onChange: (value) => {
-                try {
-                  showtimeSchema.shape.showtime.parse(value);
-                  return { success: true };
-                } catch (error: any) {
-                  return {
-                    success: false,
-                    error: error?.message || 'Invalid date'
-                  };
+    <div className="space-y-8">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
+        Movie Showtime
+      </h2>
+
+      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <form.Field
+          name="showtime"
+          validators={{
+            onChange: ({ value }: { value: string }) => {
+              try {
+                showtimeSchema.parse(value);
+                if (!isEditMode) {
+                  const date = new Date(value);
+                  const now = new Date();
+                  if (date < now) {
+                    return "Showtime must be in the future";
+                  }
                 }
+
+                return undefined;
+              } catch (error) {
+                if (error instanceof z.ZodError) {
+                  return error.errors[0]?.message || "Showtime is invalid";
+                }
+                return "Showtime validation failed";
               }
-            }}
-            children={(field) => (
+            },
+          }}
+        >
+          {(field: any) => {
+            // Format the date for the datetime-local input
+            let formattedDate = "";
+            if (field.state.value) {
+              const date = new Date(field.state.value);
+              if (!isNaN(date.getTime())) {
+                formattedDate = date.toISOString().slice(0, 16);
+              }
+            }
+
+            return (
               <div>
-                <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="showtime"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Showtime
                 </label>
                 <input
-                  id={field.name}
-                  name={field.name}
+                  id="showtime"
                   type="datetime-local"
-                  value={formatDateForInput(field.state.value)}
-                  onChange={(e) => field.handleChange(new Date(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={formattedDate}
+                  onChange={(e) => {
+                    const date = new Date(e.target.value);
+                    field.handleChange(date.toISOString());
+                  }}
+                  onBlur={field.handleBlur}
+                  className={`w-full px-4 py-2 text-left border 
+                    ${
+                      field.state.meta.isTouched &&
+                      field.state.meta.errors &&
+                      field.state.meta.errors.length > 0
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    } 
+                    rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
                 />
-                {field.state.meta.touchedErrors ? (
-                  <div className="text-red-500 text-sm mt-1">{field.state.meta.touchedErrors}</div>
-                ) : null}
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors &&
+                  field.state.meta.errors.length > 0 && (
+                    <div className="mt-2 text-red-600 text-sm flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                      {field.state.meta.errors}
+                    </div>
+                  )}
+
+                <div className="mt-4 p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <p className="text-sm text-gray-600 flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-2 text-blue-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    {isEditMode
+                      ? "You are editing an existing movie's showtime."
+                      : "Please select a future date and time for the movie showtime."}
+                  </p>
+                </div>
               </div>
-            )}
-          />
-        </div>
-        
-        <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-          <h3 className="text-sm font-medium text-yellow-800">Showtime Guidelines</h3>
-          <ul className="mt-2 text-sm text-yellow-700 list-disc pl-5 space-y-1">
-            <li>Schedule movies at least 24 hours in advance</li>
-            <li>Avoid scheduling multiple movies at the same time</li>
-            <li>Consider peak hours for popular movies</li>
-          </ul>
-        </div>
-      </form>
-    </form.Provider>
+            );
+          }}
+        </form.Field>
+      </div>
+    </div>
   );
 };
 

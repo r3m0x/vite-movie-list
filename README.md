@@ -18,15 +18,15 @@ This is a simple movie booking application built with React, TypeScript, and Tai
 
     Use the following credentials to log in:
 
-    * **Username:** `admin`
-    * **Password:** `admin`
+    - **Username:** `admin`
+    - **Password:** `admin`
 
 4.  **Home Page and Booking:**
 
     After successful login, you will be redirected to the home page. Here, you can:
 
-    * Choose a movie and select the number of seats you want to book.
-    * Note: One ticket can contain multiple seats.
+    - Choose a movie and select the number of seats you want to book.
+    - Note: One ticket can contain multiple seats.
 
 5.  **Manage Bookings Page:**
 
@@ -46,10 +46,10 @@ This is a simple movie booking application built with React, TypeScript, and Tai
 
 ## Technologies Used
 
-* React
-* TypeScript
-* Tailwind CSS
-* Vite
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
 
 ## Installation
 
@@ -73,26 +73,51 @@ This is a simple movie booking application built with React, TypeScript, and Tai
 
 ## Development
 
-* **Start the development server:**
+- **Start the development server:**
 
-    ```bash
-    npm run dev
-    ```
+  ```bash
+  npm run dev
+  ```
 
-* **Build for production:**
+- **Build for production:**
 
-    ```bash
-    npm run build
-    ```
+  ```bash
+  npm run build
+  ```
 
-* **Preview the production build:**
+- **Preview the production build:**
 
-    ```bash
-    npm run preview
-    ```
+  ```bash
+  npm run preview
+  ```
 
 ## Notes
 
-* This is a basic movie booking application and may lack advanced features.
-* The admin login is for demonstration purposes. In a real-world application, proper authentication and authorization would be required.
-* The movie data is sample data, and not using a real database.
+- This is a basic movie booking application and may lack advanced features.
+- The admin login is for demonstration purposes. In a real-world application, proper authentication and authorization would be required.
+- The movie data is sample data, and not using a real database.
+
+Role: admin
+Username: admin
+Password: admin
+
+    Username: admin2
+    Password: admin2
+
+Role: user
+Username: user
+Password: user
+
+Page Structure:
+- Login Page:
+Allows users to log in with valid credentials.
+Redirects to the Home Page upon successful login.
+- Home Page:
+        Displays a list of movies.
+        Users can select a movie and book seats.
+        One ticket can contain multiple seats.
+- Manage Bookings Page:
+        Allows users to view, edit, and cancel their bookings.
+
+- Dashboard Page:
+        Displays a dashboard with admin features.

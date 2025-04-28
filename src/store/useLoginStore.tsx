@@ -24,7 +24,7 @@ export const useLoginStore = create<LoginState>()(
       expiresAt: null,
       login: async (username: string, password: string) => {
         const isValidPassword =
-          (username === "admin" && password === "admin") ||
+          (username === "admin" && password === "admin") || (username === "admin2" && password === "admin2") ||
           (username === "user" && password === "user");
 
         if (!isValidPassword) {

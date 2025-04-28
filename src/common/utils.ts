@@ -27,8 +27,8 @@ class Utils {
       hour12: true
     };
 
-    return date.toLocaleString('en-US', options || defaultOptions);
-  }
+    return date.toLocaleString(navigator.language || 'en-SG', options || defaultOptions);
+  };
 
   /**
    * Truncates a string to a specified length and adds ellipsis if needed

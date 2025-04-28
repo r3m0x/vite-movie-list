@@ -40,7 +40,7 @@ export const useLoginStore = create<LoginState>()(
           const userRoles: UserRole[] = await response.json();
 
           const user = userRoles.find((u) => u.username === username);
-          const role = user ? user.role : "user"; // Assign role or null if user not found
+          const role = user ? user.role : "user";
 
           // Set expiration time to 30 minutes from now
           const expiresAt = Date.now() + 30 * 60 * 1000;

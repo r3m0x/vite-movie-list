@@ -15,11 +15,15 @@ function Navbar() {
     const filterNavItems: NavItem[] = routeTreeChildren
         ?.filter((route) => {
             const isAdmin = role === "admin";
+            if (route.options?.staticData?.hideInNav) {
+                return false;
+            }
+            
             return (
-                (!route.options?.staticData?.hideInNav && (!isLoggedIn && route.path === "login") ||
+                ((!isLoggedIn && route.path === "login") ||
                     (isLoggedIn && route.path !== "login")) &&
                 ((!isAdmin && !route.path.startsWith("admin")) ||
-                    (isAdmin && (route.path.startsWith("admin") || route.path === "logout" )))
+                    (isAdmin && (route.path.startsWith("admin") || route.path === "logout")))
             );
         })
         .map((route) => {
@@ -70,7 +74,7 @@ function Navbar() {
                     )}
                 </div>
             </div>
-            
+
             {/* Mobile menu - can be expanded if needed */}
             <div className="md:hidden">
                 <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">

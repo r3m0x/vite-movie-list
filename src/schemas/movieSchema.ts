@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const movieDetailsSchema = z.object({
+  id: z.string(),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   rating: z.number().min(0, "Rating must be at least 0").max(5, "Rating must be at most 5"),
@@ -9,10 +10,16 @@ export const movieDetailsSchema = z.object({
 });
 
 export const showtimeSchema = z.object({
-  showtime: z.date({
-    required_error: "Showtime is required",
-    invalid_type_error: "Showtime must be a valid date",
-  }),
+  showtime: z.string()
+    .refine(
+      (val) => {
+        const date = new Date(val);
+        return !isNaN(date.getTime());
+      },
+      {
+        message: "Showtime must be a valid date format",
+      }
+    ),
 });
 
 export const movieSchema = movieDetailsSchema.merge(showtimeSchema);
